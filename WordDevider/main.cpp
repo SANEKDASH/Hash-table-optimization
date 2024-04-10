@@ -4,7 +4,7 @@
 #include "../ListDump/list_dump.h"
 #include "../Text-parsing-functions/text_parse.h"
 
-static const char *kWordSetFileName = "../word_set.txt";
+static const char *kWordSetFileName = "../seek_word_set.txt";
 
 int main(int argc, const char *argv[])
 {

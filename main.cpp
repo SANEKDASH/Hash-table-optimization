@@ -4,29 +4,25 @@
 
 int main(int argc, const char *argv[])
 {
-    DumpHashTableBegin();
-
     WordSet word_set = {0};
-
     ReadWordSetOutOfFile(&word_set, argv[1]);
 
     HashTable hash_table = {0};
 
-    HashTableInit(&hash_table, 692);
+    HashTableInit       (&hash_table, 797);
+    LoadWordsInHashTable(&hash_table, &word_set);
 
-    for (size_t i = 0; i < word_set.word_count; i++)
-    {
-        HashTableAddData(&hash_table, word_set.word_array[i].str);
-    }
+    WordSet seek_word_set = {0};
+    ReadWordSetOutOfFile(&seek_word_set, argv[2]);
+
+    TestHashTable(&hash_table, &seek_word_set);
 
     PrintHashTableLoadedData(&hash_table,
-                             "hash_table_load.txt");
+                             "hash_table_load.csv");
 
     HashTableDtor(&hash_table);
 
     WordSetDtor(&word_set);
-
-    DumpHashTableEnd();
 
     return 0;
 }

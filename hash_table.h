@@ -8,6 +8,8 @@
 #include "FastList/list.h"
 #include "debug/debug.h"
 
+#include "Text-parsing-functions/text_parse.h"
+
 typedef unsigned int HashTableState_t;
 
 typedef enum
@@ -78,5 +80,13 @@ HashTableErrs_t DumpHashTableEnd();
 
 void PrintHashTableLoadedData(HashTable  *hash_table,
                               const char *file_name);
+
+HashTableErrs_t TestHashTable(HashTable *hash_table,
+                              WordSet   *seek_word_set);
+
+HashTableErrs_t LoadWordsInHashTable(HashTable *hash_table,
+                                     WordSet   *word_set);
+
+ uint64_t CRC32Hash    (ListElemType_t data);
 
 #endif

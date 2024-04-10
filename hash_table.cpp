@@ -1,3 +1,5 @@
+#include <immintrin.h>
+
 #include "hash_table.h"
 #include "ListDump/list_dump.h"
 
@@ -7,9 +9,13 @@
 
 #ifdef DEBUG
 
-    #define HASH_TABLE_VERIFY(hash_table) HashTableVerify(hash_table)
+    #define DUMP_HASH_TABLE(hash_table) DumpHashTable(hash_table);
+
+    #define HASH_TABLE_VERIFY(hash_table) HashTableVerify(hash_table);
 
 #else
+
+    #define DUMP_HASH_TABLE(hash_table)
 
     #define HASH_TABLE_VERIFY(hash_table) ;
 
@@ -26,7 +32,8 @@ static uint64_t ZeroHash     (ListElemType_t data);
 static uint64_t StrlenHash   (ListElemType_t data);
 static uint64_t SumHash      (ListElemType_t data);
 static uint64_t SumStrlenHash(ListElemType_t data);
-static uint64_t StrangeHash  (ListElemType_t data);
+static uint64_t RorHash      (ListElemType_t data);
+static uint64_t LorHash      (ListElemType_t data);
 
 static void DumpHashTable(HashTable  *hash_table);
 
@@ -43,7 +50,7 @@ HashTableErrs_t HashTableAddData(HashTable      *hash_table,
 
     HASH_TABLE_VERIFY(hash_table);
 
-    DumpHashTable(hash_table);
+    DUMP_HASH_TABLE(hash_table);
 
     size_t hash_pos = hash_table->HashFunc(data) % hash_table->list_count;
 
@@ -97,7 +104,7 @@ HashTableErrs_t HashTableInit(HashTable *hash_table,
 
     hash_table->list_count = hash_table_size;
 
-    hash_table->HashFunc = SumStrlenHash;
+    hash_table->HashFunc = CRC32Hash;
 
     hash_table->list_array = (List *) calloc(hash_table->list_count, sizeof(List));
 
@@ -117,7 +124,7 @@ HashTableErrs_t HashTableInit(HashTable *hash_table,
 
     HASH_TABLE_VERIFY(hash_table);
 
-    DumpHashTable(hash_table);
+    DUMP_HASH_TABLE(hash_table);
 
     return kHashSuccess;
 }
@@ -236,19 +243,50 @@ static uint64_t RorHash(ListElemType_t data)
 
     uint64_t hash_val = 0;
 
-    if (*data == '\0')
-    {
-        return hash_val;
-    }
-
     for (size_t i = 0; data[i] != '\0'; i++)
     {
-        hash_val = (hash_val | (hash_val & (~((~0) << 1)))) ^ data[i];
+        hash_val = ((hash_val >> 1) | ((hash_val & (~((~0) << 1))) << 63)) ^ data[i];
     }
 
     return hash_val;
 }
 
+//================================================================================================
+
+static uint64_t LorHash(ListElemType_t data)
+{
+    CHECK(data);
+
+    uint64_t hash_val = 0;
+
+    for (size_t i = 0; data[i] != '\0'; i++)
+    {
+        hash_val = ((hash_val << 1) | ((hash_val & (~((~0) >> 1))) >> 63)) ^ data[i];
+    }
+
+    return hash_val;
+}
+//================================================================================================
+
+uint64_t CRC32Hash(ListElemType_t data)
+{
+    uint32_t mask = 0;
+    uint32_t hash_val = 0xFFFFFFFF;
+
+    for (size_t i = 0; data[i] != 0; i++)
+    {
+        hash_val = hash_val ^ ((uint32_t) data[i]);
+
+        for (size_t j = 0; j < 8; j++)
+        {
+            mask = -(hash_val & 1);
+
+            hash_val = (hash_val >> 1) ^ (0xEDB88320 & mask);
+        }
+    }
+
+    return (uint64_t) ~hash_val;
+}
 //================================================================================================
 
 static HashTableState_t HashTableVerify(HashTable *hash_table)
@@ -382,11 +420,48 @@ void PrintHashTableLoadedData(HashTable  *hash_table,
 {
     FILE *data_file = fopen(file_name, "w");
 
+    fprintf(data_file, "ячейка\tкол-во объектов\n");
+
     for (size_t i = 0; i < hash_table->list_count; i++)
     {
-        fprintf(data_file, "%ld %ld\n", i + 1, hash_table->list_array[i].elem_count);
+        fprintf(data_file, "%ld\t%ld\n",i, hash_table->list_array[i].elem_count);
     }
 
     fclose(data_file);
+}
+//================================================================================================
+
+HashTableErrs_t LoadWordsInHashTable(HashTable *hash_table,
+                                     WordSet   *word_set)
+{
+    CHECK(hash_table);
+    CHECK(word_set);
+
+    for (size_t i = 0; i < word_set->word_count; i++)
+    {
+        HashTableAddData(hash_table, word_set->word_array[i].str);
+    }
+
+    return kHashSuccess;
+}
+//================================================================================================
+
+HashTableErrs_t TestHashTable(HashTable *hash_table,
+                              WordSet   *seek_word_set)
+{
+    CHECK(hash_table);
+    CHECK(seek_word_set);
+
+    HashTablePos pos = {0};
+
+    for (size_t j = 0; j < 20; j++)
+    {
+        for (size_t i = 0; i < seek_word_set->word_count; i++)
+        {
+            HashTableFindElem(hash_table, seek_word_set->word_array[i].str, &pos);
+        }
+    }
+
+    return kHashSuccess;
 }
 //================================================================================================

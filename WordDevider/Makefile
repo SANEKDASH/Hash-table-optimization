@@ -9,21 +9,24 @@ SOURCES=main.cpp ../Text-parsing-functions/text_parse.cpp \
 
 OBJECTS=$(SOURCES:.cpp=.o)
 
-EXECUTABLE=HashTable
+EXECUTABLE=WordDevider
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	@$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 .cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+	@$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf ../Text-parsing-functions/*.o HashTable
-	rm -rf ../ListDump/*.o HashTable
-	rm -rf ../FastList/*.o HashTable
-	rm -rf ../debug/*.o HashTable
-	rm -rf ../*.html List
-	rm -rf ../dump_src/*.png List
-	rm -rf ../dump_src/*.dot List
+	@rm -rf ../Text-parsing-functions/*.o WordDevider
+	@rm -rf ../ListDump/*.o WordDevider
+	@rm -rf ../FastList/*.o WordDevider
+	@rm -rf ../debug/*.o WordDevider
+	@rm -rf ../*.html WordDevider
+	@rm -rf ../dump_src/*.png WordDevider
+	@rm -rf ../dump_src/*.dot WordDevider
+
+run:
+	./WordDevider seek_file.txt
