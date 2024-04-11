@@ -24,4 +24,4 @@ asm_CRC32Hash:
     mov rsp, rbp
 	pop rbp
 
-	ret
+    ret
