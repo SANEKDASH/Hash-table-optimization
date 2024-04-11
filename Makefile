@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=		-c -march=native
+CFLAGS=-c -march=native
 LDFLAGS=
 SOURCES=main.cpp Text-parsing-functions/text_parse.cpp  \
 				 FastList/list.cpp 					    \
@@ -8,7 +8,7 @@ SOURCES=main.cpp Text-parsing-functions/text_parse.cpp  \
 				 debug/color_print.cpp					\
 				 hash_table.cpp
 
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS= $(SOURCES:.cpp=.o) asm/crc32hash.o
 
 EXECUTABLE=HashTable
 
@@ -38,3 +38,6 @@ run:
 
 test:
 	@perf record ./HashTable word_set.txt seek_word_set.txt
+
+stat:
+	@perf stat -r 20 ./HashTable word_set.txt seek_word_set.txt

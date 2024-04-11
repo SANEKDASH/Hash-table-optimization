@@ -1,0 +1,9 @@
+all:
+	nasm -f elf64 crc32hash.asm -o crc32hash.o
+	g++ -no-pie main.cpp crc32hash.o -o hash
+
+	@echo ---------------------------------------
+	@echo  Success!
+	@echo ---------------------------------------
+clean:
+	rm -f *.o

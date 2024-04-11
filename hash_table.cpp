@@ -3,6 +3,8 @@
 #include "hash_table.h"
 #include "ListDump/list_dump.h"
 
+extern "C" uint64_t asm_CRC32Hash(ListElemType_t data);
+
 //================================================================================================
 
 static FILE *dump_file = nullptr;
@@ -85,7 +87,7 @@ HashTableErrs_t HashTableInit(HashTable *hash_table,
 
     hash_table->list_count = hash_table_size;
 
-    hash_table->HashFunc = CRC32Hash;
+    hash_table->HashFunc = asm_CRC32Hash;
 
     hash_table->list_array = (List *) calloc(hash_table->list_count, sizeof(List));
 
@@ -419,7 +421,7 @@ HashTableErrs_t LoadWordsInHashTable(HashTable *hash_table,
     return kHashSuccess;
 }
 
-static const size_t kTestCount = 256;
+static const size_t kTestCount = 2560;
 
 //================================================================================================
 

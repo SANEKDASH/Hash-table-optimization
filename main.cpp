@@ -17,6 +17,9 @@ int main(int argc, const char *argv[])
 
     TestHashTable(&hash_table, &seek_word_set);
 
+    PrintHashTableLoadedData(&hash_table,
+                             "hash_table_load_data.csv");
+
     HashTableDtor(&hash_table);
 
     WordSetDtor(&seek_word_set);
