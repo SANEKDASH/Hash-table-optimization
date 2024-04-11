@@ -22,7 +22,7 @@ static uint64_t ZeroHash(ListElemType_t data)
 ```
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/zero_hash_diag.png)
 
 Дисперсия: 40152.63
 
@@ -37,7 +37,7 @@ static uint64_t StupidHash(ListElemType_t data)
 
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/stupid_hash_diag.png)
 
 Дисперсия: 1741.259
 
@@ -52,7 +52,7 @@ static uint64_t StrlenHash(ListElemType_t data)
 
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/strlen_hash_diag.png)
 
 Дисперсия: 5558.15
 
@@ -73,7 +73,7 @@ static uint64_t SumHash(ListElemType_t data)
 
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/sum_hash_diag.png)
 
 Дисперсия: 42.29
 
@@ -96,7 +96,8 @@ static uint64_t SumStrlenHash(ListElemType_t data)
 
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/sum_strlen_hash_diag.png)
+
 
 Дисперсия: 2925.81
 
@@ -116,11 +117,12 @@ static uint64_t RorHash(ListElemType_t data)
 ```
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/ror_hash_diag.png)
+
 
 Дисперсия: 27.98
 
-7) LorHash:
+7) RolHash:
 ```cpp
 static uint64_t LorHash(ListElemType_t data)
 {
@@ -138,7 +140,7 @@ static uint64_t LorHash(ListElemType_t data)
 ```
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/rol_hash_diag.png)
 
 Дисперсия: 13.27
 
@@ -167,7 +169,7 @@ uint64_t CRC32Hash(ListElemType_t data)
 ```
 
 Гистограмма заселенности:
-    картинка
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/crc32_hash_diag.png)
 
 Дисперсия: 9.58
 
@@ -183,7 +185,7 @@ uint64_t CRC32Hash(ListElemType_t data)
 без всяких флагов оптимизации.
 
 Результаты профилирования №1:
-    фотка ы
+![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/perf1.png)
 
 Как можем заметить, узкими местами в алгоритмах хэш-таблицы являются следующие функции:
 1) CRC32Hash()

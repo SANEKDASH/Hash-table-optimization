@@ -14,8 +14,8 @@ asm_CRC32Hash:
     jmp .HashTest
 .HashCycle:
     crc32 eax, byte [rdi]
-
     inc rdi
+
 .HashTest:
     cmp byte [rdi], 0
     ja .HashCycle
