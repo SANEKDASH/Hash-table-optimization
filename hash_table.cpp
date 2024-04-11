@@ -249,11 +249,6 @@ static uint64_t RolHash(ListElemType_t data)
 
 uint64_t CRC32Hash(ListElemType_t data)
 {
-    if (data == nullptr)
-    {
-        return 0;
-    }
-
     uint32_t mask = 0;
 
     uint32_t hash_val = 0xFFFFFFFF;

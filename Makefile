@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=		-c -march=native -DDEBUG
+CFLAGS=		-c -march=native
 LDFLAGS=
 SOURCES=main.cpp Text-parsing-functions/text_parse.cpp  \
 				 FastList/list.cpp 					    \
