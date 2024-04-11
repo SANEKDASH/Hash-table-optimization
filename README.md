@@ -185,7 +185,7 @@ uint64_t CRC32Hash(ListElemType_t data)
 без всяких флагов оптимизации.
 
 Результаты профилирования №1:
-![alt text](https://github.com/SANEKDASH/Hash-table-optimization/tree/main/readme_src/perf1.png)
+![alt text](./readme_src/perf1.png)
 
 Как можем заметить, узкими местами в алгоритмах хэш-таблицы являются следующие функции:
 1) CRC32Hash()
