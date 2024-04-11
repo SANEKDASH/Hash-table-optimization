@@ -10,6 +10,29 @@
 
 #include "Text-parsing-functions/text_parse.h"
 
+#define SET_HASH_STATE(err_code) hash_table->state |= err_code
+
+#ifdef DEBUG
+    #ifdef HASH_TABLE_DUMP
+
+        #define DUMP_HASH_TABLE(hash_table) DumpHashTable(hash_table)
+
+    #else
+
+        #define DUMP_HASH_TABLE(hash_table)   ;
+
+    #endif
+
+    #define HASH_TABLE_VERIFY(hash_table) HashTableVerify(hash_table)
+
+#else
+
+    #define DUMP_HASH_TABLE(hash_table)   ;
+
+    #define HASH_TABLE_VERIFY(hash_table) ;
+
+#endif
+
 typedef unsigned int HashTableState_t;
 
 typedef enum

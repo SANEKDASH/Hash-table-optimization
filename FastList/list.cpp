@@ -4,17 +4,7 @@
 #include "list.h"
 #include "../ListDump/list_dump.h"
 
-#ifdef DEBUG
 
-#define TEXT_DUMP_LIST(list) TextDumpList(list)
-#define DEBUG_ON(...) __VA_ARGS__
-
-#else
-
-#define TEXT_DUMP_LIST(list)
-#define DEBUG_ON(...)
-
-#endif
 
 //================================================================================================
 
@@ -23,6 +13,8 @@ static const size_t kStartListSize = 8;
 static const int kFreePoison = -1;
 
 static const int kMultiplier = 2;
+
+static const size_t kMaxValidListSize = 65536;
 
 //================================================================================================
 
@@ -38,7 +30,7 @@ ListState_t ListVerify(List *list)
 {
     CHECK(list);
 
-    if (list->head < 0)
+    if (list->head > kMaxValidListSize)
     {
         list->status |= kHeadLessZero;
     }
@@ -63,7 +55,7 @@ ListState_t ListVerify(List *list)
         list->status |= kTailLessZero;
     }
 
-    if (list->elem_count < 0)
+    if (list->elem_count > kMaxValidListSize)
     {
         list->status |= kElemCountLessZero;
     }
@@ -140,19 +132,24 @@ ListState_t ListDestructor(List *list)
 //================================================================================================
 
 ListState_t ListAddAfter(List *list,
-                          size_t pos,
-                          ListElemType_t value)
+                         size_t pos,
+                         ListElemType_t value)
 {
-    CHECK(list);
+    CHECK      (list);
+    GRAPH_DUMP (list);
+    LIST_VERIFY(list);
 
-    GRAPH_DUMP(list);
-
-    if (ListVerify(list) != kListClear)
+    if (list->status != kListClear)
     {
         return list->status;
     }
 
-    if (list->prev[pos] == kFreePoison || pos < 0)
+    if (pos < 0 || pos >= kMaxValidListSize)
+    {
+        return kWrongUsingOfList;
+    }
+
+    if (list->prev[pos] == kFreePoison)
     {
         return kWrongUsingOfList;
     }
@@ -193,7 +190,7 @@ ListState_t ListAddBefore(List *list,
 {
     CHECK(list);
 
-    return ListAddAfter(list, pos -1, value);
+    return ListAddAfter(list, pos - 1, value);
 }
 
 //================================================================================================
@@ -237,8 +234,8 @@ static ListState_t ResizeList(List *list, size_t new_size)
 //================================================================================================
 
 ListState_t ListFind(List           *list,
-                      ListElemType_t  val,
-                      size_t         *list_pos)
+                     ListElemType_t  val,
+                     size_t         *list_pos)
 {
     CHECK(list);
     CHECK(list_pos);
@@ -266,7 +263,7 @@ ListState_t ListFind(List           *list,
 //================================================================================================
 
 ListState_t ListDelete(List   *list,
-                        size_t  pos)
+                       size_t  pos)
 {
     CHECK(list);
 
@@ -309,7 +306,8 @@ ListState_t ListDelete(List   *list,
 
 //================================================================================================
 
-static void MemSetList(List *list, ListElemType_t value)
+static void MemSetList(List           *list,
+                       ListElemType_t  value)
 {
     CHECK(list);
 

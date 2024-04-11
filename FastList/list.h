@@ -7,10 +7,27 @@
 #include "../debug/debug.h"
 #include "../debug/color_print.h"
 
+#ifdef DEBUG
+
+    #define TEXT_DUMP_LIST(list) TextDumpList(list)
+
+    #define DEBUG_ON(...) __VA_ARGS__
+
+    #define LIST_VERIFY(list) ListVerify(list)
+
+#else
+
+    #define TEXT_DUMP_LIST(list) ;
+
+    #define DEBUG_ON(...) ;
+
+    #define LIST_VERIFY(list) ;
+
+#endif
+
 typedef char *ListElemType_t;
 
 typedef unsigned int ListState_t;
-
 
 static const ListElemType_t kPoisonVal = nullptr;
 

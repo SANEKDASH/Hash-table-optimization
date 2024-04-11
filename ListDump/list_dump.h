@@ -4,13 +4,13 @@
 #include "../FastList/list.h"
 
 #ifdef DEBUG
-
-#define GRAPH_DUMP(list) GraphDumpList(list, __FILE__, __func__, __LINE__)
-
+    #ifdef LIST_GRAPH_DUMP
+        #define GRAPH_DUMP(list) GraphDumpList(list, __FILE__, __func__, __LINE__)
+    #else
+        #define GRAPH_DUMP(list) ;
+    #endif
 #else
-
-#define GRAPH_DUMP(list) ;
-
+        #define GRAPH_DUMP(list) ;
 #endif
 
 void BeginListGraphDump();

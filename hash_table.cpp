@@ -5,24 +5,6 @@
 
 //================================================================================================
 
-#define SET_HASH_STATE(err_code) hash_table->state |= err_code
-
-#ifdef DEBUG
-
-    #define DUMP_HASH_TABLE(hash_table) DumpHashTable(hash_table);
-
-    #define HASH_TABLE_VERIFY(hash_table) HashTableVerify(hash_table);
-
-#else
-
-    #define DUMP_HASH_TABLE(hash_table)
-
-    #define HASH_TABLE_VERIFY(hash_table) ;
-
-#endif
-
-//================================================================================================
-
 static FILE *dump_file = nullptr;
 
 static const char *kDumpFileName = "hash_table_dump.html";
@@ -33,7 +15,7 @@ static uint64_t StrlenHash   (ListElemType_t data);
 static uint64_t SumHash      (ListElemType_t data);
 static uint64_t SumStrlenHash(ListElemType_t data);
 static uint64_t RorHash      (ListElemType_t data);
-static uint64_t LorHash      (ListElemType_t data);
+static uint64_t RolHash      (ListElemType_t data);
 
 static void DumpHashTable(HashTable  *hash_table);
 
@@ -55,7 +37,6 @@ HashTableErrs_t HashTableAddData(HashTable      *hash_table,
     size_t hash_pos = hash_table->HashFunc(data) % hash_table->list_count;
 
     size_t list_pos = 0;
-
 
     if (ListFind(hash_table->list_array + hash_pos, data, &list_pos) == kCantFind)
     {
@@ -114,13 +95,11 @@ HashTableErrs_t HashTableInit(HashTable *hash_table,
 
         if (constructor_result != kListClear)
         {
-            // тут функция, которая возращает ошибку по коду хуеты
             SET_HASH_STATE(constructor_result);
 
             return kListConstructorErr;
         }
     }
-
 
     HASH_TABLE_VERIFY(hash_table);
 
@@ -253,7 +232,7 @@ static uint64_t RorHash(ListElemType_t data)
 
 //================================================================================================
 
-static uint64_t LorHash(ListElemType_t data)
+static uint64_t RolHash(ListElemType_t data)
 {
     CHECK(data);
 
@@ -270,7 +249,13 @@ static uint64_t LorHash(ListElemType_t data)
 
 uint64_t CRC32Hash(ListElemType_t data)
 {
+    if (data == nullptr)
+    {
+        return 0;
+    }
+
     uint32_t mask = 0;
+
     uint32_t hash_val = 0xFFFFFFFF;
 
     for (size_t i = 0; data[i] != 0; i++)
@@ -322,19 +307,12 @@ static HashTableState_t HashTableVerify(HashTable *hash_table)
 
 static HashTableStateCode_t VerifyHashTableLists(HashTable *hash_table)
 {
-    bool list_damaged_state = false;
-
     for (size_t i = 0; i < hash_table->list_count; i++)
     {
         if (ListVerify(hash_table->list_array + i) != kListClear)
         {
-            list_damaged_state = true;
+            return kOneOfListsDamaged;
         }
-    }
-
-    if (list_damaged_state)
-    {
-        return kOneOfListsDamaged;
     }
 
     return kHashTableClear;
@@ -437,6 +415,7 @@ HashTableErrs_t LoadWordsInHashTable(HashTable *hash_table,
     CHECK(hash_table);
     CHECK(word_set);
 
+
     for (size_t i = 0; i < word_set->word_count; i++)
     {
         HashTableAddData(hash_table, word_set->word_array[i].str);
@@ -444,6 +423,9 @@ HashTableErrs_t LoadWordsInHashTable(HashTable *hash_table,
 
     return kHashSuccess;
 }
+
+static const size_t kTestCount = 256;
+
 //================================================================================================
 
 HashTableErrs_t TestHashTable(HashTable *hash_table,
@@ -454,9 +436,9 @@ HashTableErrs_t TestHashTable(HashTable *hash_table,
 
     HashTablePos pos = {0};
 
-    for (size_t j = 0; j < 20; j++)
+    for (size_t i = 0; i < kTestCount; i++)
     {
-        for (size_t i = 0; i < seek_word_set->word_count; i++)
+        for (size_t j = 0; j < seek_word_set->word_count; j++)
         {
             HashTableFindElem(hash_table, seek_word_set->word_array[i].str, &pos);
         }
