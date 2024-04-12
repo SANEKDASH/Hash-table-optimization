@@ -3,220 +3,320 @@
 #
 # Total Lost Samples: 0
 #
-# Samples: 36K of event 'cycles:P'
-# Event count (approx.): 41172551894
+# Samples: 7K of event 'cycles:P'
+# Event count (approx.): 7890541749
 #
-# Children      Self  Command    Shared Object     Symbol                                                 
-# ........  ........  .........  ................  .......................................................
+# Children      Self  Command    Shared Object         Symbol                                                 
+# ........  ........  .........  ....................  .......................................................
 #
-    99.96%     0.00%  HashTable  libc.so.6         [.] __libc_start_call_main
+    99.76%     0.00%  HashTable  libc.so.6             [.] __libc_start_call_main
             |
             ---__libc_start_call_main
                main
                |          
-                --99.72%--TestHashTable(HashTable*, WordSet*)
-                          |          
-                           --98.45%--HashTableFindElem(HashTable*, char*, HashTablePos*)
-                                     |          
-                                     |--74.00%--CRC32Hash(char*)
-                                     |          
-                                     |--11.04%--ListFind(List*, char*, unsigned long*)
-                                     |          
-                                     |--7.05%--__strcmp_evex
-                                     |          
-                                      --0.56%--strcmp@plt
+               |--98.55%--TestHashTable(HashTable*, WordSet*)
+               |          |          
+               |          |--92.15%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+               |          |          |          
+               |          |          |--41.86%--ListFind(List*, char*, unsigned long*)
+               |          |          |          
+               |          |          |--26.69%--__strcmp_evex
+               |          |          |          
+               |          |          |--3.77%--asm_CRC32Hash.HashCycle
+               |          |          |          
+               |          |          |--3.17%--strcmp@plt
+               |          |          |          
+               |          |          |--2.07%--asm_CRC32Hash.HashTest
+               |          |          |          
+               |          |           --1.06%--asm_CRC32Hash
+               |          |          
+               |          |--0.91%--ListFind(List*, char*, unsigned long*)
+               |          |          
+               |           --0.84%--asm_CRC32Hash
+               |          
+                --1.07%--HashTableFindElem(HashTable*, char*, HashTablePos*)
 
-    99.96%     0.00%  HashTable  HashTable         [.] main
+    99.76%     0.00%  HashTable  HashTable             [.] main
             |
             ---main
                |          
-                --99.72%--TestHashTable(HashTable*, WordSet*)
-                          |          
-                           --98.45%--HashTableFindElem(HashTable*, char*, HashTablePos*)
-                                     |          
-                                     |--74.00%--CRC32Hash(char*)
-                                     |          
-                                     |--11.04%--ListFind(List*, char*, unsigned long*)
-                                     |          
-                                     |--7.05%--__strcmp_evex
-                                     |          
-                                      --0.56%--strcmp@plt
+               |--98.55%--TestHashTable(HashTable*, WordSet*)
+               |          |          
+               |          |--92.15%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+               |          |          |          
+               |          |          |--41.86%--ListFind(List*, char*, unsigned long*)
+               |          |          |          
+               |          |          |--26.69%--__strcmp_evex
+               |          |          |          
+               |          |          |--3.77%--asm_CRC32Hash.HashCycle
+               |          |          |          
+               |          |          |--3.17%--strcmp@plt
+               |          |          |          
+               |          |          |--2.07%--asm_CRC32Hash.HashTest
+               |          |          |          
+               |          |           --1.06%--asm_CRC32Hash
+               |          |          
+               |          |--0.91%--ListFind(List*, char*, unsigned long*)
+               |          |          
+               |           --0.84%--asm_CRC32Hash
+               |          
+                --1.07%--HashTableFindElem(HashTable*, char*, HashTablePos*)
 
-    99.90%     0.86%  HashTable  HashTable         [.] TestHashTable(HashTable*, WordSet*)
+    99.62%     4.82%  HashTable  HashTable             [.] TestHashTable(HashTable*, WordSet*)
             |          
-            |--99.04%--TestHashTable(HashTable*, WordSet*)
+            |--94.80%--TestHashTable(HashTable*, WordSet*)
             |          |          
-            |           --98.45%--HashTableFindElem(HashTable*, char*, HashTablePos*)
-            |                     |          
-            |                     |--74.00%--CRC32Hash(char*)
-            |                     |          
-            |                     |--11.04%--ListFind(List*, char*, unsigned long*)
-            |                     |          
-            |                     |--7.05%--__strcmp_evex
-            |                     |          
-            |                      --0.56%--strcmp@plt
+            |          |--92.15%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+            |          |          |          
+            |          |          |--41.86%--ListFind(List*, char*, unsigned long*)
+            |          |          |          
+            |          |          |--26.69%--__strcmp_evex
+            |          |          |          
+            |          |          |--3.77%--asm_CRC32Hash.HashCycle
+            |          |          |          
+            |          |          |--3.17%--strcmp@plt
+            |          |          |          
+            |          |          |--2.07%--asm_CRC32Hash.HashTest
+            |          |          |          
+            |          |           --1.06%--asm_CRC32Hash
+            |          |          
+            |          |--0.91%--ListFind(List*, char*, unsigned long*)
+            |          |          
+            |           --0.84%--asm_CRC32Hash
             |          
-             --0.86%--__libc_start_call_main
+             --4.82%--__libc_start_call_main
                        main
                        |          
-                        --0.69%--TestHashTable(HashTable*, WordSet*)
+                       |--3.75%--TestHashTable(HashTable*, WordSet*)
+                       |          
+                        --1.07%--HashTableFindElem(HashTable*, char*, HashTablePos*)
 
-    99.19%     6.00%  HashTable  HashTable         [.] HashTableFindElem(HashTable*, char*, HashTablePos*)
+    95.87%    14.27%  HashTable  HashTable             [.] HashTableFindElem(HashTable*, char*, HashTablePos*)
             |          
-            |--93.19%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+            |--81.61%--HashTableFindElem(HashTable*, char*, HashTablePos*)
             |          |          
-            |          |--74.00%--CRC32Hash(char*)
+            |          |--41.86%--ListFind(List*, char*, unsigned long*)
             |          |          
-            |          |--11.04%--ListFind(List*, char*, unsigned long*)
+            |          |--26.69%--__strcmp_evex
             |          |          
-            |          |--7.05%--__strcmp_evex
+            |          |--3.77%--asm_CRC32Hash.HashCycle
             |          |          
-            |           --0.56%--strcmp@plt
+            |          |--3.17%--strcmp@plt
+            |          |          
+            |          |--2.07%--asm_CRC32Hash.HashTest
+            |          |          
+            |           --1.06%--asm_CRC32Hash
             |          
-             --6.00%--__libc_start_call_main
+             --14.27%--__libc_start_call_main
                        main
                        TestHashTable(HashTable*, WordSet*)
                        |          
-                        --5.43%--HashTableFindElem(HashTable*, char*, HashTablePos*)
-
-    74.47%    74.22%  HashTable  HashTable         [.] CRC32Hash(char*)
-            |          
-             --74.22%--__libc_start_call_main
-                       main
+                       |--11.61%--HashTableFindElem(HashTable*, char*, HashTablePos*)
                        |          
-                        --74.20%--TestHashTable(HashTable*, WordSet*)
-                                  |          
-                                   --74.18%--HashTableFindElem(HashTable*, char*, HashTablePos*)
-                                             |          
-                                              --73.99%--CRC32Hash(char*)
+                       |--0.91%--ListFind(List*, char*, unsigned long*)
+                       |          
+                        --0.84%--asm_CRC32Hash
 
-    11.97%    11.23%  HashTable  HashTable         [.] ListFind(List*, char*, unsigned long*)
+    46.86%    43.01%  HashTable  HashTable             [.] ListFind(List*, char*, unsigned long*)
             |          
-            |--11.23%--__libc_start_call_main
+            |--43.01%--__libc_start_call_main
+            |          main
+            |          TestHashTable(HashTable*, WordSet*)
+            |          HashTableFindElem(HashTable*, char*, HashTablePos*)
+            |          |          
+            |          |--38.93%--ListFind(List*, char*, unsigned long*)
+            |          |          
+            |           --3.17%--strcmp@plt
+            |          
+             --3.85%--ListFind(List*, char*, unsigned long*)
+
+    29.68%    26.37%  HashTable  libc.so.6             [.] __strcmp_evex
+            |          
+            |--26.37%--__libc_start_call_main
             |          main
             |          |          
-            |           --11.22%--TestHashTable(HashTable*, WordSet*)
+            |           --26.32%--TestHashTable(HashTable*, WordSet*)
             |                     HashTableFindElem(HashTable*, char*, HashTablePos*)
             |                     |          
-            |                     |--10.49%--ListFind(List*, char*, unsigned long*)
+            |                     |--23.39%--__strcmp_evex
             |                     |          
-            |                      --0.56%--strcmp@plt
+            |                      --2.94%--ListFind(List*, char*, unsigned long*)
             |          
-             --0.74%--ListFind(List*, char*, unsigned long*)
+             --3.30%--__strcmp_evex
 
-     7.62%     7.07%  HashTable  libc.so.6         [.] __strcmp_evex
+     6.78%     5.60%  HashTable  HashTable             [.] asm_CRC32Hash.HashTest
             |          
-            |--7.07%--__libc_start_call_main
+            |--5.60%--__libc_start_call_main
             |          main
             |          |          
-            |           --7.06%--TestHashTable(HashTable*, WordSet*)
+            |           --5.55%--TestHashTable(HashTable*, WordSet*)
             |                     HashTableFindElem(HashTable*, char*, HashTablePos*)
             |                     |          
-            |                     |--6.51%--__strcmp_evex
+            |                     |--3.69%--asm_CRC32Hash.HashCycle
             |                     |          
-            |                      --0.55%--ListFind(List*, char*, unsigned long*)
+            |                      --0.89%--asm_CRC32Hash.HashTest
             |          
-             --0.54%--__strcmp_evex
+             --1.18%--asm_CRC32Hash.HashTest
 
-     1.10%     0.54%  HashTable  HashTable         [.] strcmp@plt
+     6.44%     3.28%  HashTable  HashTable             [.] strcmp@plt
             |          
-            |--0.56%--strcmp@plt
+            |--3.28%--__libc_start_call_main
+            |          main
+            |          TestHashTable(HashTable*, WordSet*)
+            |          HashTableFindElem(HashTable*, char*, HashTablePos*)
+            |          __strcmp_evex
             |          
-             --0.54%--__libc_start_call_main
-                       main
-                       TestHashTable(HashTable*, WordSet*)
-                       HashTableFindElem(HashTable*, char*, HashTablePos*)
-                       __strcmp_evex
+             --3.17%--strcmp@plt
 
-     0.05%     0.00%  HashTable  HashTable         [.] HashTableAddData(HashTable*, char*)
-     0.05%     0.00%  HashTable  HashTable         [.] LoadWordsInHashTable(HashTable*, WordSet*)
-     0.01%     0.01%  HashTable  [unknown]         [k] 0xffffffffa4201237
-     0.01%     0.00%  HashTable  libc.so.6         [.] _int_malloc
-     0.01%     0.00%  HashTable  libc.so.6         [.] __memmove_evex_unaligned_erms
-     0.01%     0.00%  HashTable  [unknown]         [k] 0xffffffffa42000e6
-     0.01%     0.00%  HashTable  [unknown]         [k] 0xffffffffa4119ce8
-     0.01%     0.01%  HashTable  libc.so.6         [.] __libc_calloc
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa4200f0b
-     0.01%     0.01%  HashTable  [unknown]         [k] 0xffffffffa3512bf1
-     0.01%     0.00%  HashTable  [unknown]         [k] 0000000000000000
-     0.01%     0.00%  HashTable  libc.so.6         [.] read
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa34afb99
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa34afae3
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa34aea9b
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa34aba65
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa369f6ff
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa369d0e3
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa3512bf7
-     0.01%     0.01%  HashTable  HashTable         [.] ListLinearization(List*)
-     0.01%     0.00%  HashTable  HashTable         [.] ListAddAfter(List*, unsigned long, char*)
-     0.01%     0.01%  HashTable  libc.so.6         [.] _int_free
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa41207cb
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa30a04ef
-     0.01%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31ee806
-     0.00%     0.00%  HashTable  libc.so.6         [.] _IO_fread
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa38abdbe
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa4200bc7
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa41216f3
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa30c8340
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa33f4a34
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa33f47fc
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa33f123e
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa33ec49f
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa33e9a65
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa38abdc0
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa4200ba0
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa31ed6ff
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31ed8a4
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31ed700
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa31c9a82
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31ed8bf
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa3205178
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa3204c88
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31ec956
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31cc36d
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31c9a89
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa3183f49
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa41207d0
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31007ee
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa3100495
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa413a2c9
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa31668cb
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa315a319
-     0.00%     0.00%  HashTable  [unknown]         [.] 0xffffffffa3183f4b
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa409adc9
-     0.00%     0.00%  HashTable  [unknown]         [k] 0x00007668deeeb08b
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34badb7
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34baa59
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34b998d
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34b9868
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34b86e9
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34b8157
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa354787d
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34b8c16
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa34b7e84
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa33fb92b
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa33fb380
-     0.00%     0.00%  HashTable  [unknown]         [k] 0xffffffffa409adcb
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0x00007668deeeb08b
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa42000e6
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa4119ce8
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa34badb7
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa34baa59
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa34b998d
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa34b9868
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa34b86e9
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa34b8157
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa35477a6
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa34bb5b7
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa3378f0e
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa3373738
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa3373303
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa336a288
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa3007401
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa3013935
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa30bb596
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa420189e
-     0.00%     0.00%  perf-exec  [unknown]         [k] 0xffffffffa30bb594
+     3.81%     0.08%  HashTable  HashTable             [.] asm_CRC32Hash.HashCycle
+            |          
+             --3.73%--asm_CRC32Hash.HashCycle
+
+     3.09%     2.24%  HashTable  HashTable             [.] asm_CRC32Hash
+            |          
+            |--2.24%--__libc_start_call_main
+            |          main
+            |          TestHashTable(HashTable*, WordSet*)
+            |          HashTableFindElem(HashTable*, char*, HashTablePos*)
+            |          |          
+            |          |--1.18%--asm_CRC32Hash.HashTest
+            |          |          
+            |           --1.06%--asm_CRC32Hash
+            |          
+             --0.84%--asm_CRC32Hash
+
+     0.10%     0.00%  HashTable  [unknown]             [.] 0xffffffffa4200bc7
+     0.10%     0.00%  HashTable  [unknown]             [.] 0xffffffffa41216f3
+     0.09%     0.00%  HashTable  HashTable             [.] LoadWordsInHashTable(HashTable*, WordSet*)
+     0.09%     0.00%  HashTable  HashTable             [.] HashTableAddData(HashTable*, char*)
+     0.07%     0.00%  HashTable  [unknown]             [.] 0xffffffffa30c8340
+     0.07%     0.00%  HashTable  [unknown]             [.] 0xffffffffa33f4a34
+     0.07%     0.00%  HashTable  [unknown]             [.] 0xffffffffa33f47fc
+     0.07%     0.00%  HashTable  [unknown]             [.] 0xffffffffa33f123e
+     0.06%     0.00%  HashTable  [unknown]             [k] 0xffffffffa42000e6
+     0.06%     0.00%  HashTable  [unknown]             [k] 0xffffffffa4119ce8
+     0.05%     0.00%  HashTable  libc.so.6             [.] _int_malloc
+     0.05%     0.00%  HashTable  [unknown]             [.] 0xffffffffa33ec3b1
+     0.05%     0.00%  HashTable  [unknown]             [.] 0xffffffffa348ffdd
+     0.05%     0.05%  HashTable  libc.so.6             [.] _IO_fread
+     0.04%     0.04%  HashTable  libc.so.6             [.] _int_free
+     0.04%     0.02%  HashTable  libc.so.6             [.] __memmove_evex_unaligned_erms
+     0.04%     0.04%  HashTable  [unknown]             [k] 0xffffffffa348dd6d
+     0.04%     0.00%  HashTable  [unknown]             [.] 0xffffffffa348dd74
+     0.03%     0.03%  HashTable  [unknown]             [k] 0xffffffffa408869f
+     0.03%     0.00%  HashTable  ld-linux-x86-64.so.2  [.] mmap64
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa3057183
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa33fc61a
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa33c3f71
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa3400847
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa3400162
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa4096e38
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa4096727
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa40956bb
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa40955ab
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa408f22b
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa408ebe0
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa408b1ff
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa40886a4
+     0.03%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34215f7
+     0.03%     0.00%  HashTable  [unknown]             [k] 0xffffffffa341fefb
+     0.03%     0.00%  HashTable  [unknown]             [k] 0xffffffffa341dd5c
+     0.03%     0.00%  HashTable  [unknown]             [k] 0xffffffffa341d98e
+     0.03%     0.03%  HashTable  [unknown]             [k] 0xffffffffa318e135
+     0.03%     0.00%  HashTable  HashTable             [.] HashTableInit(HashTable*, unsigned long)
+     0.03%     0.00%  HashTable  HashTable             [.] ListConstructor(List*)
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa30c8304
+     0.03%     0.00%  HashTable  [unknown]             [.] 0xffffffffa318e13a
+     0.03%     0.00%  HashTable  [unknown]             [.] 0x0000000000000021
+     0.02%     0.02%  HashTable  [unknown]             [k] 0xffffffffa341d188
+     0.02%     0.00%  HashTable  [unknown]             [.] 0xffffffffa33ec396
+     0.02%     0.00%  HashTable  [unknown]             [.] 0xffffffffa344b64f
+     0.02%     0.00%  HashTable  [unknown]             [.] 0xffffffffa3421f8d
+     0.02%     0.00%  HashTable  [unknown]             [.] 0xffffffffa341d18b
+     0.02%     0.02%  HashTable  [unknown]             [k] 0xffffffffa348d2ad
+     0.02%     0.00%  HashTable  [unknown]             [.] 0xffffffffa348dd7e
+     0.02%     0.00%  HashTable  [unknown]             [.] 0xffffffffa348d2b1
+     0.01%     0.01%  HashTable  [unknown]             [k] 0xffffffffa341b6c6
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa30feca8
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa30febf5
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa30fe568
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa30fe27e
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa30f1c01
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa30f1ac1
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa33fe0fd
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa3401be3
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa3401423
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa342bcaa
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa33a1072
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa341f177
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa341b6c9
+     0.01%     0.01%  HashTable  [unknown]             [k] 0xffffffffa30bb3a7
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa420102b
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa411da2b
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa30502a3
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa3d2fb66
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa30bb3a9
+     0.01%     0.00%  HashTable  [unknown]             [.] 0x0000000000000091
+     0.01%     0.01%  HashTable  HashTable             [.] WordSetDtor(WordSet*)
+     0.01%     0.01%  HashTable  [unknown]             [k] 0xffffffffc165b14e
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa4200e67
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa411d6b4
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa304fa63
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31ad57c
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31a7ae9
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31a78cc
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffc165b155
+     0.01%     0.01%  HashTable  [unknown]             [k] 0xffffffffa3133439
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa4200f0b
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa41207cb
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa30a04ef
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31ee806
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31ed8bf
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa3205132
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa32050ea
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa3204f77
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31f2370
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31f151c
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31efec9
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa31335d6
+     0.01%     0.00%  HashTable  [unknown]             [.] 0xffffffffa313343d
+     0.01%     0.01%  HashTable  [unknown]             [k] 0xffffffffa341d080
+     0.01%     0.00%  HashTable  [unknown]             [k] 0x000075873d4eb08b
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34badb7
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34baa59
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34b998d
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34b9868
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34b86e9
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34b8157
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa354787d
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34b8c16
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34b7dea
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa34056ca
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa33f1873
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa344bb81
+     0.01%     0.00%  HashTable  [unknown]             [k] 0xffffffffa341d083
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0x000075873d4eb08b
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa42000e6
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa4119ce8
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa34badb7
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa34baa59
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa34b998d
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa34b9868
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa34b86e9
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa34b8157
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa35477a6
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa34bb5b7
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3367db0
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3378ff4
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3367db5
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa30bb594
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3378f0e
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3373738
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3373303
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa336a288
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3007401
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa3013935
+     0.00%     0.00%  perf-exec  [unknown]             [k] 0xffffffffa30bb596
 
 
 #

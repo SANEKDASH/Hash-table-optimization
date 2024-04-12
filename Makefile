@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -c -march=native
+CFLAGS = -c -march=native -DASM_CRC32
 
 LDFLAGS =
 
@@ -41,6 +41,7 @@ run:
 
 test:
 	@perf record --call-graph fp ./HashTable word_set.txt seek_word_set.txt
+	@perf report > perf_report.txt
 
 stat:
 	@perf stat -r 20 ./HashTable word_set.txt seek_word_set.txt

@@ -283,9 +283,6 @@ Stat:
 2) ListFind() (вызывается следующей функцией)
 3) HashTableFindElem()
 
-С помощью perf stat узнаем среднее время выполнения программы.
-<картинка бляу>
-
 >__strcmp_evex() я здесь не учел, так как эту функцию писали мужики, знающие свое дело.
 >Вряд ли я смогу его ускорить, но есть одна хитрость, которая мне в этом поможет.
 >Позже я вам о ней поведаю.
@@ -307,6 +304,7 @@ Stat:
 |Версия ядра Ubuntu             | 6.5.0-26-generic.      |
 |Используемый компилятор        | g++                    |
 |Версия компилятора             | 11.4.0                 |
+
 
 
 ### Оптимизация №1: Hash
@@ -346,6 +344,58 @@ asm_CRC32Hash:
     pop rbp
 
     ret
+```
+
+Результаты профилирования для версии с asm_CRC32Hash():
+```
+Call graph:
+
+# Children      Self  Command    Shared Object         Symbol
+# ........  ........  .........  ....................  .......................................................
+#
+    99.76%     0.00%  HashTable  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               |
+               |--98.55%--TestHashTable(HashTable*, WordSet*)
+               |          |
+               |          |--92.15%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+               |          |          |
+               |          |          |--41.86%--ListFind(List*, char*, unsigned long*)
+               |          |          |
+               |          |          |--26.69%--__strcmp_evex
+               |          |          |
+               |          |          |--3.77%--asm_CRC32Hash.HashCycle
+               |          |          |
+               |          |          |--3.17%--strcmp@plt
+               |          |          |
+               |          |          |--2.07%--asm_CRC32Hash.HashTest
+               |          |          |
+               |          |           --1.06%--asm_CRC32Hash
+               |          |
+               |          |--0.91%--ListFind(List*, char*, unsigned long*)
+               |          |
+               |           --0.84%--asm_CRC32Hash
+               |
+                --1.07%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+
+Stat:
+          1 757,61 msec task-clock                       #    1,000 CPUs utilized               ( +-  0,65% )
+                 7      context-switches                 #    3,983 /sec                        ( +-  9,17% )
+                 0      cpu-migrations                   #    0,000 /sec
+               841      page-faults                      #  478,490 /sec                        ( +-  0,02% )
+     7 627 247 609      cycles                           #    4,340 GHz                         ( +-  0,28% )
+    22 847 753 012      instructions                     #    3,00  insn per cycle              ( +-  0,00% )
+     3 441 280 626      branches                         #    1,958 G/sec                       ( +-  0,00% )
+           594 347      branch-misses                    #    0,02% of all branches             ( +- 68,39% )
+                        TopdownL1                 #     33,1 %  tma_backend_bound
+                                                  #      3,6 %  tma_bad_speculation
+                                                  #      3,8 %  tma_frontend_bound
+                                                  #     59,5 %  tma_retiring             ( +-  0,29% )
+
+            1,7580 +- 0,0115 seconds time elapsed  ( +-  0,65% )
+
 ```
 
 
