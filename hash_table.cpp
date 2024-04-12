@@ -87,7 +87,15 @@ HashTableErrs_t HashTableInit(HashTable *hash_table,
 
     hash_table->list_count = hash_table_size;
 
-    hash_table->HashFunc = asm_CRC32Hash;
+    #ifdef ASM_CRC32
+
+        hash_table->HashFunc = asm_CRC32Hash;
+
+    #else
+
+        hash_table->HashFunc = CRC32Hash;
+
+    #endif
 
     hash_table->list_array = (List *) calloc(hash_table->list_count, sizeof(List));
 

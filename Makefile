@@ -1,19 +1,22 @@
-CC=g++
-CFLAGS=-c -march=native -O3
-LDFLAGS=
-SOURCES=main.cpp Text-parsing-functions/text_parse.cpp  \
-				 FastList/list.cpp 					    \
-				 ListDump/list_dump.cpp 				\
-				 debug/debug.cpp 					    \
-				 debug/color_print.cpp					\
-				 hash_table.cpp
+CC = g++
 
-OBJECTS= $(SOURCES:.cpp=.o) asm/crc32hash.o
+CFLAGS = -c -march=native -DASM_CRC32
 
-EXECUTABLE=HashTable
+LDFLAGS =
+
+SOURCES = main.cpp 								\
+		  Text-parsing-functions/text_parse.cpp \
+		  FastList/list.cpp 				    \
+		  ListDump/list_dump.cpp 				\
+		  debug/debug.cpp 					    \
+		  debug/color_print.cpp					\
+		  hash_table.cpp
+
+OBJECTS = $(SOURCES:.cpp=.o) asm/crc32hash.o
+
+EXECUTABLE = HashTable
 
 all: $(SOURCES) $(EXECUTABLE)
-
 $(EXECUTABLE): $(OBJECTS)
 	@$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
@@ -37,7 +40,7 @@ run:
 	@./HashTable word_set.txt seek_word_set.txt
 
 test:
-	@perf record ./HashTable word_set.txt seek_word_set.txt
+	@perf record --call-graph fp ./HashTable word_set.txt seek_word_set.txt
 
 stat:
 	@perf stat -r 20 ./HashTable word_set.txt seek_word_set.txt

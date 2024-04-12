@@ -11,10 +11,33 @@
 ## Что такое хэш-таблица?
 
 ## Анализ хэш-функций
-Для хэш-таблицы было реализованно несколько хэш-функций:
+
+
+
+Идеальной хэш-функцией считается та, которая может обеспечить равномерное распределение элементов
+хэш-таблицы по ее подмножествам/спискам.
+
+Соответственно, мы можем определить насколько хорош алгоритм хэширования используя
+такую вещь, как __дисперсия__.
+
+__Дисперсия__ характеризует, насколько кольчество элементов в подможествах отличается от среднего кол-ва
+элементов в подмножестве.
+
+Считается дисперсия по следующей формуле:
+
+![alt text](./readme_src/dispersion.png)
+
+Соответственно, чем меньше дисперсия - тем лучше алгоритм.
+
+Так же удобно строить __гистограммы заселенности__ хэш-таблицы.
+Они позволяют наглядно увидеть, само распределение элементов по подножествам.
+
+Далее будут приведены дисперсии и гистограммы заселенности для нескольких
+реализованных мной хэш-алгоритмов.
+
 1) Хэш-функция, возвращающая ноль (далее ZeroHash):
 ```cpp
-static uint64_t ZeroHash(ListElemType_t data)
+static uint64_t ZeroHash(char *data)
 {
     return 0;
 }
@@ -28,7 +51,7 @@ static uint64_t ZeroHash(ListElemType_t data)
 
 2) Хэш-функция, возвращающая ASCII код первого символа в слове (далее StupidHash):
 ```cpp
-static uint64_t StupidHash(ListElemType_t data)
+static uint64_t StupidHash(char *data)
 {
     return *data;
 }
@@ -43,7 +66,7 @@ static uint64_t StupidHash(ListElemType_t data)
 
 3) Хэш-функция, возвращающая длину слова (далее StrlenHash):
 ```cpp
-static uint64_t StrlenHash(ListElemType_t data)
+static uint64_t StrlenHash(char *data)
 {
     return strlen(data);
 }
@@ -58,7 +81,7 @@ static uint64_t StrlenHash(ListElemType_t data)
 
 4) Хэш-функция, возвращающая сумму ASCII кодов всех символов в слове (далее SumHash):
 ```cpp
-static uint64_t SumHash(ListElemType_t data)
+static uint64_t SumHash(char *data)
 {
     uint64_t sum = 0;
 
@@ -79,7 +102,7 @@ static uint64_t SumHash(ListElemType_t data)
 
 5) Хэш-функция, возвращающая частное от суммы ASCII кодов всех символов в слове и его длинны (далее SumStrlenHash):
 ```cpp
-static uint64_t SumStrlenHash(ListElemType_t data)
+static uint64_t SumStrlenHash(char *data)
 {
     uint64_t sum = SumHash(data);
 
@@ -103,7 +126,7 @@ static uint64_t SumStrlenHash(ListElemType_t data)
 
 6) Хэш-функция, реализиющая следующий алгоритм(КАВО!!!)(далее RorHash):
 ```cpp
-static uint64_t RorHash(ListElemType_t data)
+static uint64_t RorHash(char *data)
 {
     uint64_t hash_val = 0;
 
@@ -124,7 +147,7 @@ static uint64_t RorHash(ListElemType_t data)
 
 7) RolHash:
 ```cpp
-static uint64_t LorHash(ListElemType_t data)
+static uint64_t LorHash(char *data)
 {
     uint64_t hash_val = 0;
 
@@ -146,7 +169,7 @@ static uint64_t LorHash(ListElemType_t data)
 
 8) CRC32Hash:
 ```cpp
-uint64_t CRC32Hash(ListElemType_t data)
+uint64_t CRC32Hash(char *data)
 {
     uint32_t mask = 0;
 
@@ -235,9 +258,9 @@ asm_CRC32Hash:
 
 ; Leaving function
     mov rsp, rbp
-	pop rbp
+    pop rbp
 
-	ret
+    ret
 ```
 
 
