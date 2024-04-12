@@ -389,8 +389,8 @@ static void DumpHashTable(HashTable  *hash_table)
     for (size_t i = 0; i < hash_table->list_count; i++)
     {
         LOG_PRINT("\t\tlist [%ld] state:      %d\n"
-                  "\t\t           elem_count: %d\n\n",i, hash_table->list_array[i].status,
-                                                         hash_table->list_array[i].elem_count);
+                  "\t\t           elem_count: %lu\n\n",i, hash_table->list_array[i].status,
+                                                          hash_table->list_array[i].elem_count);
     }
 }
 

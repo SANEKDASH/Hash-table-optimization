@@ -79,7 +79,7 @@ ListErrs_t GraphDumpList(List *list,
 
     LOG_PRINT("{rank = max;\n"
               "TAIL [style = filled, fillcolor = \"lightgreen\", shape = \"rect\", label =  \"TAIL : %d\" ]\n"
-              "ELEM_COUNT [style = filled, fillcolor = \"lightgreen\", shape = \"rect\", label =  \"ELEM COUNT : %d\" ]\n"
+              "ELEM_COUNT [style = filled, fillcolor = \"lightgreen\", shape = \"rect\", label =  \"ELEM COUNT : %lu\" ]\n"
               "FREE [style = filled, fillcolor = \"lightgreen\", shape = \"rect\", label =  \"FREE : %d\" ]\n"
               "HEAD [style = filled, fillcolor = \"lightgreen\", shape = \"rect\", label =  \"HEAD : %d\" ]}\n"
               "ELEM_COUNT->TAIL->FREE->HEAD [weight = 100, color = \"invis\"]",
@@ -100,8 +100,8 @@ ListErrs_t GraphDumpList(List *list,
     {
         if (list->data[i] != kPoisonVal)
         {
-            LOG_PRINT("node%d [style = filled, fillcolor = \"%s\", shape=Mrecord, label = "
-                    "\"<name> NODE_%d | {data : %s | <next> next : %d | <prev> prev : %d}\"]\n",
+            LOG_PRINT("node%lu [style = filled, fillcolor = \"%s\", shape=Mrecord, label = "
+                    "\"<name> NODE_%lu | {data : %s | <next> next : %d | <prev> prev : %d}\"]\n",
                     i,
                     (list->prev[i] == -1) ? "pink" : "lightblue",
                     i,
@@ -111,8 +111,8 @@ ListErrs_t GraphDumpList(List *list,
         }
         else
         {
-            LOG_PRINT("node%d [style = filled, fillcolor = \"%s\", shape=Mrecord, label = "
-                    "\"<name> NODE_%d | {data : POISON | <next> next : %d | <prev> prev : %d}\"]\n",
+            LOG_PRINT("node%lu [style = filled, fillcolor = \"%s\", shape=Mrecord, label = "
+                    "\"<name> NODE_%lu | {data : POISON | <next> next : %d | <prev> prev : %d}\"]\n",
                     i,
                     (list->prev[i] == -1) ? "pink" : "lightblue",
                     i,
@@ -125,14 +125,14 @@ ListErrs_t GraphDumpList(List *list,
 
     for (size_t i = 0; i < list->capacity - 1; i++)
     {
-        LOG_PRINT("node%d->node%d [weight = 100, color = \"invis\"]\n",
+        LOG_PRINT("node%lu->node%lu [weight = 100, color = \"invis\"]\n",
                   i,
                   i + 1);
     }
 
     for (size_t i = 0; i < list->capacity; i++)
     {
-        LOG_PRINT("node%d->node%d [weight = 0, color = \"%s\"]\n",
+        LOG_PRINT("node%lu->node%d [weight = 0, color = \"%s\"]\n",
                   i,
                   list->next[i],
                   (list->prev[i] == -1) ? "orange" : "red");
@@ -163,14 +163,14 @@ ListErrs_t GraphDumpList(List *list,
 
     fclose(dot_file);
 
-    sprintf(cmd_command, "dot -Tpng dump_src/list.dmp.dot -o dump_src/graphdump%d.png", call_count);
+    sprintf(cmd_command, "dot -Tpng dump_src/list.dmp.dot -o dump_src/graphdump%lu.png", call_count);
 
     system(cmd_command);
 
     fprintf(log_file, "Called from file: %s\n"
                       "Called from function: %s\n"
                       "Line: %d\n"
-                      "<img height=\"150px\" src=\"dump_src/graphdump%d.png\">\n"
+                      "<img height=\"150px\" src=\"dump_src/graphdump%lu.png\">\n"
                       "-----------------------------------------------------------------\n",
                       file,
                       func,
@@ -179,6 +179,8 @@ ListErrs_t GraphDumpList(List *list,
 
 
     ++call_count;
+
+    return kListClear;
 }
 
 #undef LOG_PRINT

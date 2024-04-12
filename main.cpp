@@ -17,8 +17,10 @@ int main(int argc, const char *argv[])
 
     TestHashTable(&hash_table, &seek_word_set);
 
-    PrintHashTableLoadedData(&hash_table,
-                             "hash_table_load_data.csv");
+    #ifdef GET_LOAD_DATA
+        PrintHashTableLoadedData(&hash_table,
+                                "hash_table_load_data.csv");
+    #endif
 
     HashTableDtor(&hash_table);
 
