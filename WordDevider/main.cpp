@@ -4,11 +4,9 @@
 #include "../ListDump/list_dump.h"
 #include "../Text-parsing-functions/text_parse.h"
 
-static const char *kWordSetFileName = "../seek_word_set.txt";
-
 int main(int argc, const char *argv[])
 {
-    if (argc < 1 || argc > 2)
+    if (argc < 1 || argc > 3)
     {
         ColorPrintf(kGreen, ">> WordDevider: you should write single cmd string argument - name of readable file\n");
 
@@ -19,11 +17,12 @@ int main(int argc, const char *argv[])
 
     WordSet word_set = {0};
 
-    ReadWordsFromFile(&words, argv[1]);
-
+    ReadWordsFromFile   (&words, argv[1]);
     ConvertTextToWordSet(&words, &word_set);
 
-    WriteWordSetInFile(&word_set, kWordSetFileName);
+    size_t word_len = 0;
+
+    WriteWordSetInFile(&word_set, argv[2]);
 
     TextDtor(&words);
 

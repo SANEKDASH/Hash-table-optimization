@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <immintrin.h>
 
 #include "list.h"
 #include "../ListDump/list_dump.h"
@@ -170,7 +171,10 @@ ListState_t ListAddAfter(List *list,
         list->tail = data_pos;
     }
 
-    list->data[data_pos] = value;
+    list->data[data_pos] = (ListElemType_t) aligned_alloc(64, 64 * sizeof(char));
+
+    memcpy(list->data[data_pos], value, 64);
+
     list->prev[data_pos] = pos;
     list->next[data_pos] = list->next[pos];
 
@@ -233,6 +237,18 @@ static ListState_t ResizeList(List *list, size_t new_size)
 
 //================================================================================================
 
+#ifdef LIST_FIND_OPTIMIZE
+
+    #define OPTIMIZE_ONLY(...) __VA_ARGS__
+
+#else
+
+    #define OPTIMIZE_ONLY(...) ;
+
+#endif
+
+//================================================================================================
+
 ListState_t ListFind(List           *list,
                      ListElemType_t  val,
                      size_t         *list_pos)
@@ -240,18 +256,35 @@ ListState_t ListFind(List           *list,
     CHECK(list);
     CHECK(list_pos);
 
+    OPTIMIZE_ONLY(__m512i m_val = _mm512_load_epi64(val);)
+
     size_t cur_pos = 0;
 
     while(list->next[cur_pos] != 0)
     {
         if (list->data[cur_pos] != nullptr)
         {
-            if (strcmp(val, list->data[cur_pos]) == 0)
-            {
-                *list_pos = cur_pos;
+            #ifdef LIST_FIND_OPTIMIZE
 
-                return kListClear;
-            }
+                __m512i cur_data = _mm512_load_epi64(list->data[cur_pos]);
+
+                if(_mm512_cmp_epi16_mask(m_val, cur_data, _MM_CMPINT_NE) == 0)
+                {
+                    *list_pos = cur_pos;
+
+                    return kListClear;
+                }
+
+            #else
+
+                if (strcmp(val, list->data[cur_pos]) == 0)
+                {
+                    *list_pos = cur_pos;
+
+                    return kListClear;
+                }
+
+            #endif
         }
 
         cur_pos = list->next[cur_pos];
@@ -259,6 +292,10 @@ ListState_t ListFind(List           *list,
 
     return kCantFind;
 }
+
+//================================================================================================
+
+#undef OPTIMIZE_ONLY
 
 //================================================================================================
 

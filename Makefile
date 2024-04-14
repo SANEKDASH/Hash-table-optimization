@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -c -march=native -DASM_CRC32
+CFLAGS = -c -march=native -O3 -DASM_CRC32
 
 LDFLAGS =
 

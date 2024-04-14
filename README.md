@@ -307,7 +307,7 @@ Stat:
 
 
 
-### Оптимизация №1: Hash
+### Оптимизация №1: хеш-функция
 Давайте попытаемся оптимизировать самую тяжелую функцию - функцию хеширования.
 
 Так совпало (зуб даю, реально совпало), что существует:
@@ -398,6 +398,137 @@ Stat:
 
 ```
 
+Как можем видеть, функция хеширования сдвинулась с первого на последнее место в чарте call graph.
+Это не может не радовать.
+Но у нас все еще осталась работа в виде оптимизации функции поиска.
+
+### Оптимизация №2: поиск
+
+Как можем видеть из call graph, в функции HashTableFindElem() расходуется на ListFInd() и __strcmp_evex(), который вызывается с-под ListFind().
+
+Оптимизация __strcmp_evex() является довольно сложной ~~быть может невозможной~~ задачей, так как он уже оптимизирован.
+Хитрость в этом случае заключается в том, что в данной задаче (поиск заранее известных слов) мы можем переити от общего к частному.
+
+> Длины слов в обоих текстах не превышают 37 --> не превышают 64 символов.
+
+С помощью технологии AVX-512, поддерживаемой на моем процессоре, я попытался ускорить алгоритм поиска, используя intrinsic функции.
+
+Список используемых intrinsic ф-ций:
+1) _mm512_load_epi64() - загружает в регистр 64 байт памяти, расположенной по адресу, выравненному по 64.
+
+2) _mm512_cmp_epi16_mask() - сравнивает две пачки памяти по 64 байт каждая.
+
+Результаты профилирования для версии asm_CRC32Hash() + avx_ListFind + O3:
+```
+Call graph:
+
+# Children      Self  Command    Shared Object     Symbol
+# ........  ........  .........  ................  .......................................................
+#
+    99.75%     0.00%  HashTable  libc.so.6         [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               |
+               |--98.84%--TestHashTable(HashTable*, WordSet*)
+               |          |
+               |          |--92.88%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+               |          |          |
+               |          |          |--41.47%--ListFind(List*, char*, unsigned long*)
+               |          |          |
+               |          |          |--27.47%--__strcmp_evex
+               |          |          |
+               |          |          |--3.88%--asm_CRC32Hash.HashCycle
+               |          |          |
+               |          |          |--3.27%--strcmp@plt
+               |          |          |
+               |          |          |--1.83%--asm_CRC32Hash.HashTest
+               |          |          |
+               |          |           --1.00%--asm_CRC32Hash
+               |          |
+               |          |--0.77%--ListFind(List*, char*, unsigned long*)
+               |          |
+               |           --0.66%--asm_CRC32Hash
+               |
+                --0.79%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+
+Stat:
+            585,69 msec task-clock                       #    0,999 CPUs utilized               ( +-  0,94% )
+                 1      context-switches                 #    1,707 /sec                        ( +- 31,01% )
+                 0      cpu-migrations                   #    0,000 /sec
+             3 498      page-faults                      #    5,972 K/sec                       ( +-  0,01% )
+     2 479 831 839      cycles                           #    4,234 GHz                         ( +-  0,13% )
+     6 898 250 104      instructions                     #    2,78  insn per cycle              ( +-  0,00% )
+     1 716 747 962      branches                         #    2,931 G/sec                       ( +-  0,00% )
+           165 197      branch-misses                    #    0,01% of all branches             ( +- 40,34% )
+                        TopdownL1                 #     18,1 %  tma_backend_bound
+                                                  #      1,4 %  tma_bad_speculation
+                                                  #     21,9 %  tma_frontend_bound
+                                                  #     58,7 %  tma_retiring             ( +-  0,12% )
+
+           0,58613 +- 0,00549 seconds time elapsed  ( +-  0,94% )
 
 
+```
+Результаты профилирования для версии asm_CRC32Hash() + O3:
+```
+Call graph:
 
+# Children      Self  Command    Shared Object     Symbol
+# ........  ........  .........  ................  .......................................................
+#
+    99.75%     0.00%  HashTable  libc.so.6         [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               |
+               |--98.84%--TestHashTable(HashTable*, WordSet*)
+               |          |
+               |          |--92.88%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+               |          |          |
+               |          |          |--41.47%--ListFind(List*, char*, unsigned long*)
+               |          |          |
+               |          |          |--27.47%--__strcmp_evex
+               |          |          |
+               |          |          |--3.88%--asm_CRC32Hash.HashCycle
+               |          |          |
+               |          |          |--3.27%--strcmp@plt
+               |          |          |
+               |          |          |--1.83%--asm_CRC32Hash.HashTest
+               |          |          |
+               |          |           --1.00%--asm_CRC32Hash
+               |          |
+               |          |--0.77%--ListFind(List*, char*, unsigned long*)
+               |          |
+               |           --0.66%--asm_CRC32Hash
+               |
+                --0.79%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+
+Stat:
+            895,20 msec task-clock                       #    0,999 CPUs utilized               ( +-  0,86% )
+                 3      context-switches                 #    3,351 /sec                        ( +- 14,18% )
+                 0      cpu-migrations                   #    0,000 /sec
+             3 497      page-faults                      #    3,906 K/sec                       ( +-  0,00% )
+     3 891 269 483      cycles                           #    4,347 GHz                         ( +-  0,25% )
+    13 170 303 836      instructions                     #    3,38  insn per cycle              ( +-  0,00% )
+     2 970 488 330      branches                         #    3,318 G/sec                       ( +-  0,00% )
+           191 652      branch-misses                    #    0,01% of all branches             ( +- 35,17% )
+                        TopdownL1                 #     20,5 %  tma_backend_bound
+                                                  #      1,6 %  tma_bad_speculation
+                                                  #     10,1 %  tma_frontend_bound
+                                                  #     67,9 %  tma_retiring             ( +-  0,10% )
+
+           0,89572 +- 0,00772 seconds time elapsed  ( +-  0,86% )
+```
+
+[TO BE REDACTED]
+
+Как видим, с помощью intrinsic ф-ций получилось еще больше ускорить программу.
+Круто, что сказать.
+
+В целом. больше оптимизировать нечего (по идее).
+
+можно поприкалываться на inline asm написать хэш. Этим и займемся, но завтра.
+Щас я жестко спать хочу. Закомичу и лягу - базарю. Завтра в магаз надо будет сходить - макароны пожарить.
+
+AYAYA gege как говорил Егорыч.

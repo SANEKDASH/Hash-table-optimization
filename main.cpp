@@ -24,6 +24,7 @@ int main(int argc, const char *argv[])
 
     HashTableDtor(&hash_table);
 
+
     WordSetDtor(&seek_word_set);
     WordSetDtor(&word_set);
 
