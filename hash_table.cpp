@@ -240,7 +240,7 @@ static uint64_t RorHash(ListElemType_t data)
 
     for (size_t i = 0; data[i] != '\0'; i++)
     {
-        hash_val = ((hash_val >> 1) | ((hash_val & (~((~0) << 1))) << 63)) ^ data[i];
+        hash_val = ((hash_val >> 1) | (hash_val << 63)) ^ data[i];
     }
 
     return hash_val;
@@ -256,7 +256,7 @@ static uint64_t RolHash(ListElemType_t data)
 
     for (size_t i = 0; data[i] != '\0'; i++)
     {
-        hash_val = ((hash_val << 1) | ((hash_val & (~((~0) >> 1))) >> 63)) ^ data[i];
+        hash_val = ((hash_val << 1) | (hash_val >> 63)) ^ data[i];
     }
 
     return hash_val;

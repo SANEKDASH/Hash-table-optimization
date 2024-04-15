@@ -25,7 +25,7 @@
 
 `В лучшем случае, доступ к данным можно совершить за O(1).`
 
-`В худшем (при возникновении __коллизий__) - за O(n).`
+`В худшем (при возникновении коллизий) - за O(n).`
 
 
 Большой __минус__ хеш-таблицы - использование большого кол-ва памяти по сравнению с другими структурами данных.
@@ -71,9 +71,9 @@ Load factor - характеристика хеш-таблицы, описыва
 
 __Количество списков__, полученное из алгоритма, указанного в предыдущем пункте, равно __797__
 
-__[to be redacted]__
-    Идеальной хеш-функцией считается та, которая может обеспечить равномерное распределение элементов
-    хеш-таблицы по ее подмножествам/спискам.
+
+Идеальной хеш-функцией считается та, которая может обеспечить равномерное распределение элементов
+хеш-таблицы по ее подмножествам/спискам при минимальном кол-ве __коллизий__.
 
 Соответственно, мы можем определить насколько хорош алгоритм хеширования используя
 такую вещь, как __дисперсия__.
@@ -190,7 +190,7 @@ static uint64_t RorHash(char *data)
 
     for (size_t i = 0; data[i] != '\0'; i++)
     {
-        hash_val = (hash_val | (hash_val & (~((~0) << 1)))) ^ data[i];
+        hash_val = ((hash_val >> 1) | (hash_val << 63)) ^ data[i];
     }
 
     return hash_val;
@@ -212,7 +212,7 @@ static uint64_t RolHash(char *data)
     for (size_t i = 0; data[i] != '\0'; i++)
     {
 
-        hash_val = ((hash_val << 1) | ((hash_val & (~((~0) >> 1))) >> 63)) ^ data[i];
+        hash_val = ((hash_val << 1) | (hash_val >> 63)) ^ data[i];
 
     }
 
@@ -257,6 +257,19 @@ uint64_t CRC32Hash(char *data)
 Можем видеть, что минимальная диспресия принадлежит функции CRC32Hash().
 Поэтому в дальнейших тестах будем использовать её.
 
+
+### Странные дела с RorHash() и RolHash()
+Почему-то случилось так, что в ассемблере существуют инструкции
+ror и rol (циклический сдвиг вправо и влево соответственно), но в языках C/C++ они не реализованы.
+
+Используя сайт [godbolt](https://godbolt.org/) я посмотрел, во что компилятор преобразует
+код этих двух интересных функций.
+
+Моему удивлению не было предела, когда я увидел заветные инструкции ror и rol:
+![alt text](./readme_src/ror_rol.png)
+
+Видимо компилятор g++ достаточно умен, чтобы найти в коде ror и rol.
+
 ## Поиск узких мест
 Для поиска узких мест в алгоритмах хеш-таблицы я использовал утилиту __perf__.
 
@@ -268,28 +281,19 @@ uint64_t CRC32Hash(char *data)
 
 ```
 ------------------------------------------------------------------------------------------------------------+
-Call graph:                                                                                                 |
+Call persantage:                                                                                                 |
 ------------------------------------------------------------------------------------------------------------+
 
-# Children      Self  Command    Shared Object     Symbol
-# ........  ........  .........  ................  ..........................................................
+# ........  .........  ....................  ................................................................
 #
-    99.96%     0.00%  HashTable  libc.so.6         [.] __libc_start_call_main
-            |
-            ---__libc_start_call_main
-               main
-               |
-                --99.72%--TestHashTable(HashTable*, WordSet*)
-                          |
-                           --98.45%--HashTableFindElem(HashTable*, char*, HashTablePos*)
-                                     |
-                                     |--74.00%--CRC32Hash(char*)
-                                     |
-                                     |--11.04%--ListFind(List*, char*, unsigned long*)
-                                     |
-                                     |--7.05%--__strcmp_evex
-                                     |
-                                      --0.56%--strcmp@plt
+    74.57%  HashTable  HashTable             [.] CRC32Hash(char*)
+    10.93%  HashTable  HashTable             [.] ListFind(List*, char*, unsigned long*)
+     7.16%  HashTable  libc.so.6             [.] __strcmp_evex
+     5.85%  HashTable  HashTable             [.] HashTableFindElem(HashTable*, char*, HashTablePos*)
+     0.83%  HashTable  HashTable             [.] TestHashTable(HashTable*, WordSet*)
+     0.53%  HashTable  HashTable             [.] strcmp@plt
+     0.01%  HashTable  libc.so.6             [.] _int_free
+     0.01%  HashTable  libc.so.6             [.] _IO_fread
 
 ------------------------------------------------------------------------------------------------------------+
 Stat:                                                                                                       |
@@ -317,7 +321,7 @@ Stat:                                                                           
 
 ```
 ------------------------------------------------------------------------------------------------------------+
-Call graph:                                                                                                 |
+Call persantage:                                                                                                 |
 ------------------------------------------------------------------------------------------------------------+
 
 # Overhead  Command    Shared Object     Symbol
@@ -424,38 +428,20 @@ asm_CRC32Hash:
 Результаты профилирования для версии с asm_CRC32Hash():
 ```
 ------------------------------------------------------------------------------------------------------------+
-Call graph:                                                                                                 |
+Call persantage:                                                                                                 |
 ------------------------------------------------------------------------------------------------------------+
 
-# Children      Self  Command    Shared Object         Symbol
-# ........  ........  .........  ....................  ......................................................
+# Overhead  Command    Shared Object         Symbol
+# ........  .........  ....................  ................................................................
 #
-    99.76%     0.00%  HashTable  libc.so.6             [.] __libc_start_call_main
-            |
-            ---__libc_start_call_main
-               main
-               |
-               |--98.55%--TestHashTable(HashTable*, WordSet*)
-               |          |
-               |          |--92.15%--HashTableFindElem(HashTable*, char*, HashTablePos*)
-               |          |          |
-               |          |          |--41.86%--ListFind(List*, char*, unsigned long*)
-               |          |          |
-               |          |          |--26.69%--__strcmp_evex
-               |          |          |
-               |          |          |--3.77%--asm_CRC32Hash.HashCycle
-               |          |          |
-               |          |          |--3.17%--strcmp@plt
-               |          |          |
-               |          |          |--2.07%--asm_CRC32Hash.HashTest
-               |          |          |
-               |          |           --1.06%--asm_CRC32Hash
-               |          |
-               |          |--0.91%--ListFind(List*, char*, unsigned long*)
-               |          |
-               |           --0.84%--asm_CRC32Hash
-               |
-                --1.07%--HashTableFindElem(HashTable*, char*, HashTablePos*)
+    43.91%  HashTable  HashTable             [.] ListFind(List*, char*, unsigned long*)
+    25.63%  HashTable  libc.so.6             [.] __strcmp_evex
+    13.99%  HashTable  HashTable             [.] HashTableFindElem(HashTable*, char*, HashTablePos*)
+     5.87%  HashTable  HashTable             [.] asm_CRC32Hash.HashTest
+     4.67%  HashTable  HashTable             [.] TestHashTable(HashTable*, WordSet*)
+     3.35%  HashTable  HashTable             [.] strcmp@plt
+     1.86%  HashTable  HashTable             [.] asm_CRC32Hash
+     0.12%  HashTable  libc.so.6             [.] _int_malloc
 
 ------------------------------------------------------------------------------------------------------------+
 Stat:                                                                                                       |

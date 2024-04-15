@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -c -march=native -O3  -masm=intel
+CFLAGS = -c -march=native -masm=intel
 
 LDFLAGS =
 
