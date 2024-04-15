@@ -5,8 +5,6 @@
 #include "list.h"
 #include "../ListDump/list_dump.h"
 
-
-
 //================================================================================================
 
 static const size_t kStartListSize = 8;

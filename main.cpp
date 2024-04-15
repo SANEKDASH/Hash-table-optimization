@@ -19,7 +19,7 @@ int main(int argc, const char *argv[])
 
     #ifdef GET_LOAD_DATA
         PrintHashTableLoadedData(&hash_table,
-                                "hash_table_load_data.csv");
+                                 "hash_table_load_data.csv");
     #endif
 
     HashTableDtor(&hash_table);

@@ -19,6 +19,8 @@ static uint64_t SumStrlenHash(ListElemType_t data);
 static uint64_t RorHash      (ListElemType_t data);
 static uint64_t RolHash      (ListElemType_t data);
 
+static inline uint64_t asm_inline_CRC32Hash(ListElemType_t data);
+
 static void DumpHashTable(HashTable  *hash_table);
 
 static HashTableState_t HashTableVerify(HashTable *hash_table);
@@ -90,6 +92,10 @@ HashTableErrs_t HashTableInit(HashTable *hash_table,
     #ifdef ASM_CRC32
 
         hash_table->HashFunc = asm_CRC32Hash;
+
+    #elif ASM_INLINE_CRC32
+
+        hash_table->HashFunc = asm_inline_CRC32Hash;
 
     #else
 
@@ -277,6 +283,30 @@ uint64_t CRC32Hash(ListElemType_t data)
 
     return (uint64_t) ~hash_val;
 }
+//================================================================================================
+
+static inline uint64_t asm_inline_CRC32Hash(ListElemType_t data)
+{
+    uint64_t hash_val = 0;
+
+        asm(
+            "    xor rax, rax                       \n"
+            "    mov eax, 0xffffffff                \n"
+            "    jmp HashTest                       \n"
+            "HashCycle:                             \n"
+            "    crc32 eax, byte ptr [%[str]]       \n"
+            "    inc %[str]                         \n"
+            "HashTest:                              \n"
+            "    cmp byte ptr [%[str]], 0           \n"
+            "    ja HashCycle                       \n"
+            "    mov %[hash], rax                   \n"
+                : [hash] "=m" (hash_val)
+                : [str]   "d" (data)
+           :);
+
+    return hash_val;
+}
+
 //================================================================================================
 
 static HashTableState_t HashTableVerify(HashTable *hash_table)
