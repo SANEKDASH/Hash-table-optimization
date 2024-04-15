@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -c -march=native -O3 -DASM_INLINE_CRC32 -masm=intel -DGET_LOAD_DATA
+CFLAGS = -c -march=native -O3  -masm=intel
 
 LDFLAGS =
 
@@ -29,9 +29,9 @@ clean:
 	@rm -rf FastList/*.o HashTable
 	@rm -rf debug/*.o HashTable
 	@rm -rf *.html HashTable
-	@rm -rf *.o
-	@rm -rf *.old
-	@rm -rf *.data
+	@rm -rf *.o HashTable
+	@rm -rf *.old HashTable
+	@rm -rf *.data HashTable
 
 	@rm -rf *.csv
 	@rm -rf dump_src/*.png HashTable
