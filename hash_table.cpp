@@ -433,11 +433,9 @@ void PrintHashTableLoadedData(HashTable  *hash_table,
 {
     FILE *data_file = fopen(file_name, "w");
 
-    fprintf(data_file, "ячейка\tкол-во объектов\n");
-
     for (size_t i = 0; i < hash_table->list_count; i++)
     {
-        fprintf(data_file, "%ld\t%ld\n",i, hash_table->list_array[i].elem_count);
+        fprintf(data_file, "%ld\n", hash_table->list_array[i].elem_count);
     }
 
     fclose(data_file);

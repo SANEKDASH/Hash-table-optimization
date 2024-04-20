@@ -9,7 +9,7 @@ int main(int argc, const char *argv[])
 
     HashTable hash_table = {0};
 
-    HashTableInit       (&hash_table, 797);
+    HashTableInit       (&hash_table, 4000);
     LoadWordsInHashTable(&hash_table, &word_set);
 
     WordSet seek_word_set = {0};
@@ -19,7 +19,7 @@ int main(int argc, const char *argv[])
 
     #ifdef GET_LOAD_DATA
         PrintHashTableLoadedData(&hash_table,
-                                 "hash_table_load_data.csv");
+                                 "load_data.csv");
     #endif
 
     HashTableDtor(&hash_table);
