@@ -813,4 +813,4 @@ Stat:                                                                           
 
 ## Источники
 1) [картинка с хеш-таблицей](https://velog.io/@subeom7/HashMap%ED%95%B4%EC%8B%9C%EB%A7%B5-%EC%9D%B4%EB%9E%80)
-2) [godbolt.org](godbolt.org)
+2) [godbolt.org](https://godbolt.org/)
